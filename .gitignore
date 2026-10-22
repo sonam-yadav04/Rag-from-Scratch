@@ -1,0 +1,6 @@
+.exec
+_pychache
+.env
+.envrc
+venv/
+.venv/
