@@ -5,6 +5,6 @@ _pychache
 venv/
 .venv/
 .env.example
-_pychache
+
 
 
