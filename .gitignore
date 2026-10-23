@@ -4,3 +4,7 @@ _pychache
 .envrc
 venv/
 .venv/
+.env.example
+_pychache
+
+
