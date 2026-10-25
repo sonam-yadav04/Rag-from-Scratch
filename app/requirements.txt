@@ -1,0 +1,9 @@
+fastapi
+pydantic
+uvicorn
+pypdf
+python-dotenv
+python-multipart
+sentence-transformers
+google-generativeai
+sqlalchemy
