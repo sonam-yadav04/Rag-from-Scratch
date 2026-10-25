@@ -1,10 +1,10 @@
 .exec
-_pychache
 .env
 .envrc
 venv/
 .venv/
 .env.example
 .exe
+__pycache__
 
 
