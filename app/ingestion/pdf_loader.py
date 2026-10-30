@@ -4,7 +4,12 @@ from pathlib import Path
 from typing  import List,Union
 import pymupdf  
 from app.ingestion.models import Document
+pdf = pymupdf.open("sample.pdf")
+for page in pdf:
+    text = page.get_text()
+    print(text)
 
+pdf.close()
 def clean_text(text:str)->str:
     """cleans raw PDF text:fixes line breaks,removes null bytes and multiple spaces."""
     if not text:
