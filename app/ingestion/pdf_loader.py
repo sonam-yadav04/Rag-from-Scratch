@@ -26,4 +26,4 @@ def load_pdf(path: str) -> list[dict]:
 
 
 if __name__ == "__main__":
-    load_pdf("sample.pdf")
+    load_pdf("full-stack_resume(1).pdf")
