@@ -1,6 +1,6 @@
 # from dataclasses import dataclass, field
-# from typing import Any, Dict
-# from sqlalchemy import BaseModel
+from typing import Any, Dict, Literal
+from sqlalchemy import BaseModel,Field
 
 
 # @dataclass
@@ -17,8 +17,6 @@
 #     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
-from pydantic import BaseModel, Field
-from typing import Literal
 
 
 class ExtractedPage(BaseModel):
