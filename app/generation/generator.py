@@ -22,3 +22,17 @@ def build_prompt(question, context):
     """
     return prompt
 
+client = Chat.completion.create(
+    model="gpt-4o",
+    messages=[
+        {
+            "role": "system",
+            "content": "You are a helpful assistant."
+        },
+        {
+            "role": "user",
+            "content": build_prompt("What is the capital of France?", "France is a country in Europe.")
+        }
+    ]
+)
+
