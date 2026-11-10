@@ -1,18 +1,10 @@
-from fastapi import  FastAPI
 
-app = FastAPI()
+from app.pdf_loader import extract_text_from_pdf
 
-@app.get('/')
-def read_root():
-    return {'message': 'Hello World'}   
+file_path = "data/raw/sample.pdf"
 
-@app.get('/health')
-def health_check():
-    return {'message': 'OK'}    
+pages = extract_text_from_pdf(file_path)
 
-if __name__ == '__main__':
-    import uvicorn
-    uvicorn.run(app, host='[IP_ADDRESS]', port=8000)
-
-
-
+for page in pages:
+    print(f"\n--- Page {page['page_number']} ---")
+    print(page["text"])
