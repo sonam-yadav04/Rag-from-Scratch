@@ -1,5 +1,6 @@
 from pathlib import Path
 import pymupdf
+from app.ingestion.models import PageContent
 #1 validate the file path and extension
 
 def load_pdf(path):
@@ -36,7 +37,7 @@ def load_pdf(path):
     return pages  
 
 if __name__ == "__main__":
-    result = load_pdf("data/full_stack_resume(1).pdf") 
+    result = load_pdf("data/documents/full-stack_resume (1).pdf") 
     print(f"Loaded {len(result)} pages")
     print(result[0].source, result[0].page)
     print(result[0].text[:300])
