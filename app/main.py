@@ -1,10 +1,16 @@
+from fastapi import FastAPI
 
-from app.pdf_loader import extract_text_from_pdf
+from app.api.routes.documents import router as documents_router
 
-file_path = "data/raw/sample.pdf"
+app = FastAPI(title="RAG From Scratch")
 
-pages = extract_text_from_pdf(file_path)
+app.include_router(
+    documents_router,
+    prefix="/documents",
+    tags=["Documents"]
+)
 
-for page in pages:
-    print(f"\n--- Page {page['page_number']} ---")
-    print(page["text"])
+
+@app.get("/")
+def home():
+    return {"message": "RAG API is running"}
