@@ -6,7 +6,7 @@ load_dotenv()
 client = Groq(api_key=os.environ["GROQ_API_KEY"])
 MODEL = "qwen/qwen3.8-27b"   # use whichever model name worked in your job tracker
 
-client = GroqClient(api_key=os.getenv("GROQ_APP_KEY"))
+client = Groq(api_key=os.getenv("GROQ_APP_KEY"))
 
 def ask(messages):
     resp = client.chat.completions.create(
@@ -56,7 +56,7 @@ load_dotenv()
 client = Groq(api_key=os.environ["GROQ_API_KEY"])
 MODEL = "qwen/qwen3.8-27b"   # use whichever model name worked in your job tracker
 
-client = GroqClient(api_key=os.getenv("GROQ_APP_KEY"))
+client = Groq(api_key=os.getenv("GROQ_APP_KEY"))
 
 def ask(messages):
     resp = client.chat.completions.create(
@@ -90,3 +90,4 @@ def ask(messages):
                 "content": build_prompt("What is the capital of France?", "France is a country in Europe.")
             }
     ]
+    
