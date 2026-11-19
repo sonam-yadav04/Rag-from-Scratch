@@ -1,22 +1,24 @@
 from pathlib import Path
 import pymupdf
 from app.ingestion.models import PageContent
-#1 validate the file path and extension
 
+
+#1 validate the file path and extension
 def load_pdf(path):
     file = Path(path)
     if not file.exists():
         raise FileNotFoundError(f"PDF not found: {path}")
     if file.suffix.lower() != ".pdf":
         raise ValueError("Only .pdf files are supported")
+    
     #2.open the PDF safely 
     try:
-        doc = pymupdf.open(file)
+        doc = pymupdf.open(file) 
+        if doc.needs_pass:
+            raise ValueError("PDF is password-protected")
     except Exception as e:
-        raise ValueError(f"Could not open PDF (corrupt?): {e}")
-
-    if doc.needs_pass:
-        raise ValueError("PDF is password-protected")  
+        raise ValueError(f"Failed to open PDF: {e}")    
+   
     #3.loop all pages and skip empty 
     pages = []
     try:
@@ -37,8 +39,9 @@ def load_pdf(path):
     return pages  
 
 if __name__ == "__main__":
-    result = load_pdf("data/documents/full-stack_resume (1).pdf") 
+    result = load_pdf("data/documents/resume.pdf")
+    print("pdf loaded successfully")
     print(f"Loaded {len(result)} pages")
     print(result[0].source, result[0].page)
-    print(result[0].text[:300])
+    print(result[0].text[:3000])
         
