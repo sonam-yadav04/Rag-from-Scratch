@@ -1,25 +1,45 @@
-# import re
-# import unicodedata
-# import sys
-# from app.ingestion.pdf_loader import load_pdf
-# #1.patterns, compiled once
-# _CONTROL_AND_INVISIBLE = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f\u200b-\u200d\ufeff]")
-# _SPACES = re.compile(r"[ \t]+")
-# _HYPHEN_BREAK = re.compile(r"([a-z])-\n([a-z])")
-# _BLANK_RUNS = re.compile(r"\n{3,}")
+import re
+from app.ingestion.pdf_loader import load_pdf
+def clean_text(text: str) -> str:
+    """
+    Clean extracted PDF text before passing it to the chunker.
+    """
+    if not text or not text.strip():
+        return ""
+    # 1. Normalize Windows and Mac line endings
+    text = text.replace("\r\n", "\n").replace("\r", "\n")
+    # 2. Remove null characters
+    text = text.replace("\x00", "")
+    # 3. Remove unnecessary spaces and tabs
+    text = re.sub(r"[ \t]+", " ", text)
 
-# #2. normalize unicode and line endings
-# text = unicodedata.normalize("NFKC", text)
-# text = text.replace("\r\n", "\n").replace("\r", "\n")
+    # 4. Remove excessive blank lines
+    text = re.sub(r"\n{3,}", "\n\n", text)
 
-# #3. remove noise, in this order
-# def clean_text(text: str) -> str:
-#     text = _CONTROL_AND_INVISIBLE.sub("", text)
-#     text = _SPACES.sub(" ", text)
-#     text = "\n".join(line.strip() for line in text.split("\n"))
-#     text = _HYPHEN_BREAK.sub(r"\1\2", text)
-#     text = _BLANK_RUNS.sub("\n\n", text)
-#     return text.strip()
+    # 5. Remove leading and trailing whitespace
+    text = text.strip()
+
+    return text
+
+def clean_pdf(path: str):
+    pages = load_pdf(path)
+    cleaned_pages = []
+
+    for page in pages:
+        page.text = clean_text(page.text)
+
+        if page.text:
+            cleaned_pages.append(page)
+
+    return cleaned_pages
+
+if __name__ == "__main__":
+    result = clean_pdf("data/documents/resume.pdf")
+    print(f"Successfully cleaned {len(result)} pages")
+
+    for page in result:
+        print(f"\nPage: {page.page}")
+        print(page.text[:1000])
 
 # def clean_pages(pages: list[PageContent]) -> list[PageContent]:
 #     """Clean every page, keeping source and page number intact."""
@@ -32,10 +52,3 @@
 #         raise ValueError("No text left after cleaning")
 #     return cleaned
 
-import re
-
-def clean_text(text: str) -> str:
-    text = re.sub(r"[ \t]+", " ", text)
-    text = "\n".join(line.strip() for line in text.split("\n"))
-    text = re.sub(r"\n{3,}", "\n\n", text)
-    return text.strip()
