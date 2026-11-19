@@ -1,16 +1,15 @@
 from fastapi import FastAPI
-
-from app.api.routes.documents import router as documents_router
+# from app.data import documents
 
 app = FastAPI(title="RAG From Scratch")
 
-app.include_router(
-    documents_router,
-    prefix="/documents",
-    tags=["Documents"]
-)
+# app.include_router(
+#     documents,
+#     prefix="/documents",
+#     tags=["Documents"]
+# )
 
 
-@app.get("/")
-def home():
+@app.get("/health", tags=["Health"])
+def health_check():
     return {"message": "RAG API is running"}
