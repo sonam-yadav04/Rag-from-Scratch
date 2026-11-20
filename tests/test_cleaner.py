@@ -1,35 +1,30 @@
-
 from app.ingestion.cleaner import clean_text
 
-
+#1. for extra spaces and tabs
 def test_remove_extra_spaces():
-    result = clean_text("Hello     World")
-    assert result == "Hello World"
+    result =clean_text("This is a test.    This is only a test.\t\t")
+    assert result == "This is a test. This is only a test."
+    
+#2.for null chars
 
-
-def test_remove_null_characters():
-    result = clean_text("Hello\x00World")
-    assert result == "HelloWorld"
-
-
+def test_null_char():
+    res = clean_text("This is a test.\x00This is only a test.")
+    assert res == "This is a test.This is only a test."
+#3. normalize line ending
 def test_normalize_line_endings():
-    result = clean_text("Hello\r\nWorld")
-    assert result == "Hello\nWorld"
-
+    res = clean_text("hello\r\nworld")  
+    assert res == "hello\nworld" 
+#4. exsessive blank line 
 
 def test_remove_excessive_blank_lines():
     result = clean_text("Hello\n\n\n\nWorld")
     assert result == "Hello\n\nWorld"
+#5. empty text
+def test_empty():
+    assert clean_text("") == ""   
+#6. whitespace
+def test_white_space():
+    assert clean_text("   \n   ") == ""         
 
-
-def test_strip_whitespace():
-    result = clean_text("   Hello World   ")
-    assert result == "Hello World"
-
-
-def test_empty_text():
-    assert clean_text("") == ""
-
-
-def test_whitespace_only():
-    assert clean_text("   \n   ") == ""
+     
+        
