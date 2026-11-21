@@ -1,6 +1,5 @@
 from app.ingestion.models import Chunk
 
-
 def chunk_text(text: str, size: int = 500, overlap: int = 100) -> list[str]:
     """Split text into overlapping pieces of at most `size` characters."""
     if size <= 0 or overlap < 0 or overlap >= size:
