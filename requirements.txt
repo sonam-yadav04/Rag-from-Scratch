@@ -10,3 +10,4 @@ sqlalchemy
 pymupdf
 groq
 pytest
+chromadb
