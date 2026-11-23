@@ -1,7 +1,8 @@
 import chromadb
-from app.retrieval.embedder import embed_texts
+import os
 #table name = collection  name 
 COLLECTION_NAME = "rag_documents"
+CHROMA_PATH = os.getenv("CHROMA_PATH", "./chroma_db")
  # db client 
 _client = None
 #table 
@@ -14,9 +15,7 @@ def get_collection():
  
     if _collection is None:
         # creating persistent Client -If your application stops and restarts, your stored vectors remain available.
-        _client = chromadb.PersistentClient(
-            path="./chroma_db"
-        )
+        _client = chromadb.PersistentClient( path=CHROMA_PATH)
         # create new collection if not exsits otherwise returns the exist collection
         _collection = _client.get_or_create_collection(
             name=COLLECTION_NAME,
@@ -37,6 +36,9 @@ def add_chunks(chunks:list[Chunk], embeddings :list[list[float]])->None:
     documents = []
     metadatas = []
     
+    for source in {c.source for c in chunks}:   # drop stale chunks from older versions
+      collection.delete(where={"source": source})
+    
     for chunk in chunks:
         chunk_id = (
             f"{chunk.source}_page{chunk.page}"
@@ -51,6 +53,7 @@ def add_chunks(chunks:list[Chunk], embeddings :list[list[float]])->None:
                 "chunk_index":chunk.chunk_index
             }
         )  
+    
 # add() inserts new records and raises an error if an ID already exists
 # upsert() inserts new records or updates existing records with matching IDs.
      
@@ -59,5 +62,32 @@ def add_chunks(chunks:list[Chunk], embeddings :list[list[float]])->None:
         embeddings=embeddings,
         documents=documents,
         metadatas=metadatas
-    )  
+    ) 
+
+def search(query_embedding: list[float], k: int = 4, where: dict | None = None) -> list[dict]:
+    """Return up to k nearest chunks as dicts, nearest first, with score = 1 - distance."""
+    collection = get_collection()
+    total = collection.count()
+    if total == 0:
+        return []
+    
+    result = collection.query(
+        query_embeddings=[query_embedding],
+        n_results=min(k, total),
+        where=where,
+        include=["documents", "metadatas", "distances"],
+    )
+    hits = []
+    for text, meta, dist in zip(
+        result["documents"][0], result["metadatas"][0], result["distances"][0]
+    ):
+        hits.append({
+            "text": text,
+            "source": meta["source"],
+            "page": meta["page"],
+            "chunk_index": meta["chunk_index"],
+            "score": 1 - dist,
+        })
+    return hits      
+    
 
