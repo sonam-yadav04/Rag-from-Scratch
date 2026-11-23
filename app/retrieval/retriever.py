@@ -16,7 +16,7 @@ def retrieve(
     if k <= 0:
         raise ValueError("k must be positive")
     
-    query_vector = embed_query(question)            # raises on an empty question
+    query_vector = embed_query(question)   # raises on an empty question
     hits = search(query_vector, k=k, where=where)
 
     return [
