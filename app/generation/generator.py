@@ -65,3 +65,17 @@ def generate_answer(context:str, question:str)->str:
 
         
     
+if __name__ == "__main__":
+
+    context = """
+    Sonam has experience in Python and FastAPI.
+    She has worked with MySQL, Redis and React.
+    She completed a five-month internship.
+    """
+
+    question = "Which backend technologies does Sonam know?"
+
+    answer = generate_answer(context, question)
+
+    print("\nGenerated Answer:")
+    print(answer)
