@@ -79,7 +79,7 @@ def search(query_embedding: list[float], k: int = 4, where: dict | None = None) 
     )
     hits = []
     for text, meta, dist in zip(
-        result["documents"][0], result["metadatas"][0], result["distances"][0]
+        result["ids"],result["documents"][0],result["metadatas"][0], result["distances"][0]
     ):
         hits.append({
             "text": text,
