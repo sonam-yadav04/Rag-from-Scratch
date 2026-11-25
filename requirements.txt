@@ -11,3 +11,4 @@ pymupdf
 groq
 pytest
 chromadb
+rank-bm25
