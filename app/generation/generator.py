@@ -58,13 +58,6 @@ def generate_answer(context:str, question:str)->str:
     
     return res.choices[0].message.content.strip()
 
-  
-      
-     
-      
-
-        
-    
 if __name__ == "__main__":
 
     context = """
@@ -74,8 +67,6 @@ if __name__ == "__main__":
     """
 
     question = "Which backend technologies does Sonam know?"
-
     answer = generate_answer(context, question)
-
     print("\nGenerated Answer:")
     print(answer)

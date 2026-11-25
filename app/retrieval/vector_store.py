@@ -24,12 +24,12 @@ def get_collection():
         )
 
     return _collection
-
-def add_chunks(chunks:list[Chunk], embeddings :list[list[float]])->None:
+# for storying embeddings of the chunks 
+def add_chunks(chunks:list[Chunk], embeddings:list[list[float]])->None:
     if not chunks:
         return
     if len(chunks) != len(embeddings):
-        raise ValueError("numberof chunks and embedding must be equal")
+        raise ValueError("number of chunks and embedding must be equal")
     
     collection = get_collection()
     ids = []
@@ -78,10 +78,11 @@ def search(query_embedding: list[float], k: int = 4, where: dict | None = None) 
         include=["documents", "metadatas", "distances"],
     )
     hits = []
-    for text, meta, dist in zip(
-        result["ids"],result["documents"][0],result["metadatas"][0], result["distances"][0]
+    for chunk_id ,text, meta, dist in zip(
+        result["ids"][0],result["documents"][0],result["metadatas"][0], result["distances"][0]
     ):
         hits.append({
+            "id": chunk_id,
             "text": text,
             "source": meta["source"],
             "page": meta["page"],
