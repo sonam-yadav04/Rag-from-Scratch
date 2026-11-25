@@ -34,4 +34,8 @@ def rerank(
             "chunk":chunk,
             "rerank_score":float(score)
         })   
-         
+    ranked_chunks.sort(
+        key=lambda item: item["rerank_score"],
+        reverse=True
+    ) 
+    return ranked_chunks[:top_n]    
