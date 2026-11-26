@@ -16,11 +16,7 @@ documents = [
         "source": "project.pdf",
         "page": 1
     },
-    {
-        "text": "I developed REST APIs using Django and Python.",
-        "source": "project.pdf",
-        "page": 2
-    }
+   
 ]
 retriever = BM25Retriever(documents)
 query = "Python FastAPI backend"
